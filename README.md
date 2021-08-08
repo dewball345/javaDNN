@@ -11,6 +11,8 @@ As of 8/8/2021
 Need to add activation functions, different kinds of optimizers, many other layers(like cnn, lstm, etc), and more.
 (certainly will have to change my code quite a bit(as my gradient update function won't work for softmax and layers like CNN's and RNN's))
 
+Also have to change my training loop a bit
+
 This readme will be updated with more information, such as installation/usage/etc.
 
 # Example
