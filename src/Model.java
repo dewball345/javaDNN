@@ -1,15 +1,17 @@
 import java.util.Arrays;
 
 public class Model {
-    private DenseLayer[] layers;
+    private Layer[] layers;
     private MSELoss loss;
 
-    public Model(DenseLayer[] layers, double lr, MSELoss loss){
+    public Model(Layer[] layers, double lr, MSELoss loss){
         this.layers = layers;
         this.loss = loss;
 
-        for(DenseLayer layerI: layers){
-            layerI.setLr(lr);
+        for(Layer layerI: layers){
+            if(!(layerI instanceof Activation)) {
+                ((DenseLayer) layerI).setLr(lr);
+            }
         }
     }
 
@@ -26,21 +28,31 @@ public class Model {
 //                System.out.println(Arrays.toString(currentState));
 
                 //TODO: loss metric
-                double[] loss = this.loss.loss(currentState, ys[xsJ]);
+                double loss = this.loss.loss(currentState, ys[xsJ]);
                 double[] lossGradient = this.loss.lossGradient(currentState, ys[xsJ]);
 
-                System.out.println("LOSS: " +
-                        Arrays.toString(loss) +
+                System.out.println( "EPOCH: " + epochI +
+                        " LOSS: " +
+                        loss +
                         " OUTPUT: " +
                         Arrays.toString(currentState) +
                         " ACTUAL: " +
                         Arrays.toString(ys[xsJ]));
 
-                currentState = this.layers[this.layers.length-1].backPass(lossGradient);
+                Layer layerAt = this.layers[this.layers.length-1];
+//                if(layerAt instanceof DenseLayer){
+//                    System.out.println(((DenseLayer) layerAt).getName());
+//                }
+
+                currentState = layerAt.backPass(lossGradient);
 
 
-                for(int layerK = this.layers.length-2; layerK >= 0; layerK++){
-                    currentState = this.layers[layerK].backPass(currentState);
+                for(int layerK = this.layers.length-2; layerK >= 0; layerK--){
+                    layerAt = this.layers[layerK];
+//                    if(layerAt instanceof DenseLayer){
+//                        System.out.println(((DenseLayer) layerAt).getName());
+//                    }
+                    currentState = layerAt.backPass(currentState);
                 }
             }
         }

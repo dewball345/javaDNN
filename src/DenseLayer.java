@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Random;
 
-public class DenseLayer{
+public class DenseLayer extends Layer{
     private double[][] weights;
     public double[][]  getWeights() {
         return weights;
@@ -14,7 +14,11 @@ public class DenseLayer{
 
     private int startNeurons;
     private int endNeurons;
+
     private String name;
+    public String getName() {
+        return name;
+    }
 
 
     private double[] outputs;
@@ -53,7 +57,7 @@ public class DenseLayer{
 
     public double[] forwardPass(double[] inputs){
 //        double[] outputs = new double[endNeurons];
-
+        this.outputs = new double[endNeurons];
         //matrix multiplication
         //output[0] = input[0] * weight_matrix[0][0] + bias[0] + input[1] * weight+matrix[1][0] + bias[0]...
         //i * wT + b?
@@ -65,10 +69,11 @@ public class DenseLayer{
                 double weight = this.weights[startJ][endI];
                 double bias = this.biases[endI];
                 //Replaced += with =
-                this.outputs[endI] = input * weight + bias;
+                this.outputs[endI] += input * weight + bias;
             }
         }
 
+//        System.out.println(Arrays.toString(this.outputs));
         return this.outputs;
         //removed init of this.next
 //        System.out.println(Arrays.toString(this.outputs));
@@ -78,7 +83,8 @@ public class DenseLayer{
     }
 
     public double[] backPass(double[] gradients){
-//        System.out.println(Arrays.toString(gradients));
+//        System.out.println(" " + Arrays.toString(gradients));
+//        System.out.println(" " + Arrays.deepToString(this.weights));
         //empty array for gradients
         double[] createdWeightGradients = new double[this.startNeurons];
         //iterate through upstream gradients
@@ -86,29 +92,46 @@ public class DenseLayer{
             //this is fc layer, so all inputs will have access to gradient
             for(int inputI = 0; inputI < this.startNeurons; inputI++){
                 //weight gradient = upstream gradient(gradients[gradientJ]) * inner gradient(inputs[inputI])
-                //aggregate the gradients by adding the new gradient to the createdGradients array
-                createdWeightGradients[inputI] +=  gradients[gradientJ] * this.inputs[inputI];
-
-            }
-        }
-
-        for(int gradientJ = 0; gradientJ < gradients.length; gradientJ++){
-            //this is fc layer, so all inputs will have access to gradient
-            for(int inputI = 0; inputI < this.startNeurons; inputI++){
-//                System.out.println("GRADIENT for weight " + inputI + " " + gradientJ + " " + createdWeightGradients[gradientJ]);
-
-                //updating gradients of weight
-                this.weights[inputI][gradientJ] -= createdWeightGradients[gradientJ] * this.lr;
-
-//                System.out.println("WEIGHT VALUE: " + this.weights[inputI][gradientJ]);
-//                System.out.println("GRADIENT for bias " + inputI + " " + gradientJ + " " + gradients[gradientJ]);
-                c_c();
-                //inner gradient of bias is 1, multiply with upstream gradient
+                //aggregate the gradients by adding the new gradient to the createdGradients arra
+                double currentGradient = gradients[gradientJ] * this.inputs[inputI];
+                createdWeightGradients[inputI] += currentGradient;
+                this.weights[inputI][gradientJ] -= currentGradient * this.lr;
                 this.biases[gradientJ] -= 1 * gradients[gradientJ] * this.lr;
-//                System.out.println("BIAS VALUE: " + this.biases[gradientJ]);
-
             }
         }
+
+//        for(int gradientJ = 0; gradientJ < gradients.length; gradientJ++){
+//            //this is fc layer, so all inputs will have access to gradient
+//            for(int inputI = 0; inputI < this.startNeurons; inputI++){
+//                System.out.println(" WEIGHT: "
+//                        + inputI
+//                        + " "
+//                        + gradientJ);
+//
+//                System.out.println(
+//                        " GRADIENT for weight "
+//                                + createdWeightGradients[gradientJ]
+////                                + " NAME: "
+////                                + this.name
+//                            );
+//
+//                System.out.println(" GRADIENT LENGTH: "
+//                        + gradients.length
+//                        + " CREATED GRADIENTS LENGTH: "
+//                        + createdWeightGradients.length);
+//
+//                //updating gradients of weight
+//
+//
+////                System.out.println("WEIGHT VALUE: " + this.weights[inputI][gradientJ]);
+////                System.out.println("GRADIENT for bias " + inputI + " " + gradientJ + " " + gradients[gradientJ]);
+//                c_c();
+//                //inner gradient of bias is 1, multiply with upstream gradient
+//
+////                System.out.println("BIAS VALUE: " + this.biases[gradientJ]);
+//
+//            }
+//        }
 
 
 

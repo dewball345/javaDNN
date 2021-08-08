@@ -1,12 +1,12 @@
 public class MSELoss {
 
-    public double[] loss(double[] yTrue, double[] yPred){
+    public double loss(double[] yTrue, double[] yPred){
         double[] mseVal = new double[yTrue.length];
         for(int yI = 0; yI < mseVal.length; yI++){
             mseVal[yI] = (yTrue[yI] - yPred[yI]) * (yTrue[yI] - yPred[yI]);
         }
 
-        return mseVal;
+        return (mseVal[0] + mseVal[1])/2;
     }
 
     public double[] lossGradient(double[] yTrue, double[] yPred){
