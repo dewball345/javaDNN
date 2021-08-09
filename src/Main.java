@@ -8,18 +8,18 @@ public class Main {
 
 
         Model model = new Model(new Layer[]{
-                new DenseLayer(2, 3, "dense_0"),
-                new ReluActivation(),
+                new DenseLayer(1, 3, "dense_0"),
+                new LeakyReluActivation(),
                 new DenseLayer(3, 2, "dense_1"),
-                new ReluActivation(),
-                new DenseLayer(2, 2, "dense_2")
+                new LeakyReluActivation(),
+                new DenseLayer(2, 1, "dense_2")
         }, 0.001, new MSELoss());
 
         //example formula is [x^2, y^2]
-        double[][] xs = new double[][]{new double[]{1.0, 2.0}, new double[]{3.0, 4.0}};
-        double[][] ys = new double[][]{new double[]{1.0, 4.0}, new double[]{9.0, 16.0}};
+        double[][] xs = new double[][]{new double[]{1.0}, new double[]{3.0}, new double[]{4.0}};
+        double[][] ys = new double[][]{new double[]{1.0}, new double[]{9.0}, new double[]{16.0}};
 
         //loss will slowly decrease
-        model.train(xs, ys, 100);
+        model.train(xs, ys, 1000);
     }
 }

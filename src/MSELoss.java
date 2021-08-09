@@ -1,3 +1,5 @@
+import java.lang.Math;
+
 public class MSELoss {
 
     public double loss(double[] yTrue, double[] yPred){
@@ -6,7 +8,11 @@ public class MSELoss {
             mseVal[yI] = (yTrue[yI] - yPred[yI]) * (yTrue[yI] - yPred[yI]);
         }
 
-        return (mseVal[0] + mseVal[1])/2;
+        double mseValSum = 0;
+        for(double mseItem: mseVal){
+            mseValSum += mseItem;
+        }
+        return mseValSum/mseVal.length;
     }
 
     public double[] lossGradient(double[] yTrue, double[] yPred){
