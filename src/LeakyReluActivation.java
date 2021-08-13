@@ -1,4 +1,6 @@
 public class LeakyReluActivation extends Activation {
+    //see relu comments for understanding...
+
     public double[] forwardPass(double[] inputs){
         double[] outputs = new double[inputs.length];
         for(int inputI = 0; inputI < inputs.length; inputI++){

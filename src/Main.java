@@ -8,18 +8,19 @@ public class Main {
 
 
         Model model = new Model(new Layer[]{
-                new DenseLayer(1, 3, "dense_0"),
-                new LeakyReluActivation(),
-                new DenseLayer(3, 2, "dense_1"),
-                new LeakyReluActivation(),
-                new DenseLayer(2, 1, "dense_2")
-        }, 0.001, new MSELoss());
+                new DenseLayer(1, 1, "dense_0"),
+                new SigmoidActivation()
+        }, 0.01, new MSELoss());
 
-        //example formula is [x^2, y^2]
-        double[][] xs = new double[][]{new double[]{1.0}, new double[]{3.0}, new double[]{4.0}};
-        double[][] ys = new double[][]{new double[]{1.0}, new double[]{9.0}, new double[]{16.0}};
+        //example formula is [x^2]
+        double[][] xs = new double[][]{{1}, {3}, {4}, {5}};
+        double[][] ys = new double[][]{{0}, {0}, {1}, {1}};
 
         //loss will slowly decrease
-        model.train(xs, ys, 1000);
+        System.out.println("TRAIN WITH BATCH SIZE: ");
+        model.train(xs, ys, 100, 1, false);
+//        System.out.println("SINGLE BATCH TRAINING: ");
+//        model.trainSingleBatch(xs, ys, 100);
     }
+
 }

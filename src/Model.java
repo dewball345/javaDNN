@@ -8,6 +8,7 @@ public class Model {
         this.layers = layers;
         this.loss = loss;
 
+        //Sets learning rate for layers and not activations
         for(Layer layerI: layers){
             if(!(layerI instanceof Activation)) {
                 ((DenseLayer) layerI).setLr(lr);
@@ -15,46 +16,83 @@ public class Model {
         }
     }
 
-    public void train(double[][] xs, double[][] ys, int epochs){
+    //method for training model
+    public void train(double[][] xs, double[][] ys, int epochs, int batchSize, boolean showActualPred){
+        //iterates epoch times
         for(int epochI = 0; epochI < epochs; epochI++){
-            for(int xsJ = 0; xsJ < xs.length; xsJ++){
+            //splits training data into batches
+            for(int batchI = 0; batchI < xs.length; batchI += batchSize){
+                //retrieves batch of data
+                double[][] batchX = Arrays.copyOfRange(xs, batchI, batchI+batchSize);
+                double[][] batchY = Arrays.copyOfRange(ys, batchI, batchI+batchSize);
+
+                //array for batch predictions
+                double[][] batchPreds = new double[batchY.length][];
+                //state of layer(for getting prev layer output, feeding to next, etc.)
+                double[] currentState = new double[batchY[0].length];
+
+                //iterate through the batch of inputs
+                for(int xsJ = 0; xsJ < batchX.length; xsJ++){
 //                System.out.println(" ");
+                    //forward pass through all layers
+                    currentState = this.layers[0].forwardPass(batchX[xsJ]);
+                    for(int layerK = 1; layerK < this.layers.length; layerK++){
+                        currentState = this.layers[layerK].forwardPass(currentState);
+                    }
 
-                double[] currentState = this.layers[0].forwardPass(xs[xsJ]);
-                for(int layerK = 1; layerK < this.layers.length; layerK++){
-                    currentState = this.layers[layerK].forwardPass(currentState);
-                }
-
+                    //adds model output to batch predictions
+                    batchPreds[xsJ] = currentState.clone();
 //                System.out.println(Arrays.toString(currentState));
 
-                //TODO: loss metric
-                double loss = this.loss.loss(currentState, ys[xsJ]);
-                double[] lossGradient = this.loss.lossGradient(currentState, ys[xsJ]);
+                }
 
-                System.out.println( "EPOCH: " + epochI +
-                        " LOSS: " +
-                        loss +
-                        " OUTPUT: " +
-                        Arrays.toString(currentState) +
-                        " ACTUAL: " +
-                        Arrays.toString(ys[xsJ]));
+                //calculates loss and gradient of yTrue, yPred
+                double loss = this.loss.loss(batchPreds, batchY);
+                double[] lossGradient = this.loss.lossGradient(batchPreds, batchY);
 
+                //displays metrics to user
+                if(showActualPred){
+                    System.out.println(
+                            "EPOCH: " + epochI +
+                                    " STEP: " + batchI/batchSize +
+                                    " LOSS: " +
+                                    loss +
+                                    " OUTPUT: " +
+                                    Arrays.deepToString(batchPreds) +
+                                    " ACTUAL: " +
+                                    Arrays.deepToString(batchY) +
+                                    " GRADIENT: " +
+                                    Arrays.toString(lossGradient));
+                } else {
+                    System.out.println(
+                            "EPOCH: " + epochI +
+                                    " STEP: " + batchI/batchSize +
+                                    " LOSS: " +
+                                    loss);
+                }
+
+
+                //backpropagate loss to last layer
                 Layer layerAt = this.layers[this.layers.length-1];
-//                if(layerAt instanceof DenseLayer){
-//                    System.out.println(((DenseLayer) layerAt).getName());
-//                }
-
                 currentState = layerAt.backPass(lossGradient);
 
-
+//                System.out.println("GRADIENT");
+//                System.out.println(Arrays.toString(currentState));
+//                System.out.println("WEIGHT");
+//                System.out.println(Arrays.deepToString(((DenseLayer) layerAt).getWeights()));
+//                System.out.println("BIAS");
+//                System.out.println(Arrays.toString(((DenseLayer) layerAt).getBiases()));
+                //backpropagate gradients through rest of model
                 for(int layerK = this.layers.length-2; layerK >= 0; layerK--){
                     layerAt = this.layers[layerK];
 //                    if(layerAt instanceof DenseLayer){
 //                        System.out.println(((DenseLayer) layerAt).getName());
 //                    }
                     currentState = layerAt.backPass(currentState);
+
                 }
             }
+
         }
     }
 }
