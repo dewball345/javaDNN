@@ -1,4 +1,8 @@
-import java.util.Arrays;
+import activations.SigmoidActivation;
+import layer.DenseLayer;
+import layer.Layer;
+import losses.MSELoss;
+import models.Model;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,7 +22,7 @@ public class Main {
 
         //loss will slowly decrease
         System.out.println("TRAIN WITH BATCH SIZE: ");
-        model.train(xs, ys, 100, 1, false);
+        model.train(xs, ys, 1000, 1, false);
 //        System.out.println("SINGLE BATCH TRAINING: ");
 //        model.trainSingleBatch(xs, ys, 100);
     }

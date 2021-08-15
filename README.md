@@ -4,8 +4,8 @@ Work-In-Progress autograd(not sure though) deep learning library made in java.
 # Features
 
 As of 8/8/2021
-* Implementation of `DenseLayer`
-* Implementation of `MSELoss`
+* Implementation of `layer.DenseLayer`
+* Implementation of `losses.MSELoss`
 * Implementation of `Relu`
 
 Need to add activation functions, different kinds of optimizers, many other layers(like cnn, lstm, etc), and more.

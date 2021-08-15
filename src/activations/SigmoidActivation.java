@@ -1,3 +1,7 @@
+package activations;
+
+import activations.Activation;
+
 import java.lang.Math;
 
 public class SigmoidActivation extends Activation {

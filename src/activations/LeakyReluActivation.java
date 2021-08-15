@@ -1,3 +1,7 @@
+package activations;
+
+import activations.Activation;
+
 public class LeakyReluActivation extends Activation {
     //see relu comments for understanding...
 

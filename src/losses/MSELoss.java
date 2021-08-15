@@ -1,3 +1,5 @@
+package losses;
+
 import java.lang.Math;
 
 public class MSELoss {

@@ -1,3 +1,10 @@
+package models;
+
+import activations.Activation;
+import layer.DenseLayer;
+import layer.Layer;
+import losses.MSELoss;
+
 import java.util.Arrays;
 
 public class Model {
@@ -79,14 +86,14 @@ public class Model {
 //                System.out.println("GRADIENT");
 //                System.out.println(Arrays.toString(currentState));
 //                System.out.println("WEIGHT");
-//                System.out.println(Arrays.deepToString(((DenseLayer) layerAt).getWeights()));
+//                System.out.println(Arrays.deepToString(((layer.DenseLayer) layerAt).getWeights()));
 //                System.out.println("BIAS");
-//                System.out.println(Arrays.toString(((DenseLayer) layerAt).getBiases()));
+//                System.out.println(Arrays.toString(((layer.DenseLayer) layerAt).getBiases()));
                 //backpropagate gradients through rest of model
                 for(int layerK = this.layers.length-2; layerK >= 0; layerK--){
                     layerAt = this.layers[layerK];
-//                    if(layerAt instanceof DenseLayer){
-//                        System.out.println(((DenseLayer) layerAt).getName());
+//                    if(layerAt instanceof layer.DenseLayer){
+//                        System.out.println(((layer.DenseLayer) layerAt).getName());
 //                    }
                     currentState = layerAt.backPass(currentState);
 

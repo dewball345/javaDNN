@@ -1,7 +1,9 @@
-import java.util.Arrays;
+package layer;
+
+
 import java.util.Random;
 
-public class DenseLayer extends Layer{
+public class DenseLayer extends Layer {
     private double[][] weights;
     public double[][]  getWeights() {
         return weights;

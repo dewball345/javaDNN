@@ -1,3 +1,7 @@
+package activations;
+
+import activations.Activation;
+
 public class ReluActivation extends Activation {
     //forward pass
     public double[] forwardPass(double[] inputs){
