@@ -1,5 +1,5 @@
 # javaDNN
-Work-In-Progress autograd(not sure though) deep learning library made in java. 
+Work-In-Progress autograd deep learning library made in java. 
 
 # Features
 
@@ -12,7 +12,7 @@ As of 8/13/2021
 * Implementation of `Sigmoid`
 * Batch training loop
 
-Need to add activation functions, different kinds of optimizers, many other layers(like cnn, lstm, etc), and more.
+Need to add more activation functions, different kinds of optimizers, as well as classes that can update weight matricies independently of the model's gradient update function, many other layers(like cnn, lstm, etc), and more.
 (certainly will have to change my code quite a bit(as my gradient update function won't work for softmax and layers like CNN's and RNN's))
 
 Also have to change my training loop a bit...
