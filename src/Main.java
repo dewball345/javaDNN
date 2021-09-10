@@ -16,11 +16,11 @@ public class Main {
                 new SigmoidActivation()
         }, 0.01, new MSELoss());
 
-        //example formula is [x^2]
+        //categorical example(if x > 3 output is 1 else output is 0)
         double[][] xs = new double[][]{{1}, {3}, {4}, {5}};
         double[][] ys = new double[][]{{0}, {0}, {1}, {1}};
 
-        //loss will slowly decrease
+        //loss will slowly decrease, and model will learn how to classify digits
         System.out.println("TRAIN WITH BATCH SIZE: ");
         model.train(xs, ys, 1000, 1, false);
 //        System.out.println("SINGLE BATCH TRAINING: ");
